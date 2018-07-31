@@ -1,3 +1,8 @@
+EC2 Security Group
+	Custom TCP - allow traffic to port 8787
+	
+	
+
 
 sudo yum -y update
 sudo yum -y install git
@@ -8,15 +13,14 @@ sudo yum -y install bzip2-devel.x86_64 bzip2-libs.x86_64 bzip2.x86_64
 sudo yum -y install libcurl libcurl-devel
 sudo yum -y install java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64
 
-
 ###### Openssl
-mkdir ~/lib
+
 cd ~/lib
 wget https://www.openssl.org/source/openssl-1.0.2o.tar.gz
 tar -xzvf openssl-1.0.2o.tar.gz
 mkdir openssl
 cd openssl-1.0.2o
-./config -fPIC shared --openssldir=$HOME/lib/openssl
+./config -fPIC shared --openssldir=$HOME/lib/openssl 
 make -j16
 make test -j16
 make install
@@ -25,22 +29,23 @@ echo 'export PKG_CONFIG_PATH="$HOME/lib/openssl/lib/pkgconfig:$PKG_CONFIG_PATH"'
 echo 'export LD_LIBRARY_PATH="$HOME/lib/openssl/lib:$LD_LIBRARY_PATH"' >> ~/.bash_profile
 rm ~/lib/openssl-1.0.2o.tar.gz
 
-### Restart EC2 Instance
-
 
 wget http://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz
 
 tar zxf R-3.5.1.tar.gz && cd R-3.5.1
 
-./configure --with-x=no --enable-R-shlib 
+./configure --prefix=/opt/R/3.5.1/bin/R --with-x=no --enable-R-shlib
 
 #make takes about 90 minutes to run
 make
 make pdf
 make info
 
-# Home drive install
-make install
+
+
+#install takes about 
+sudo make install
+
 
 sudo ln -s /opt/R/3.5.1/bin/R/bin/R /usr/bin/R
 sudo ln -s /opt/R/3.5.1/bin/R/bin/R /usr/local/bin/R 
@@ -62,10 +67,7 @@ R --version
 
 wget https://download2.rstudio.org/rstudio-server-rhel-1.1.456-x86_64.rpm
 
-################sudo yum -y install rstudio-server-rhel-1.1.456-x86_64.rpm
-
 sudo yum install --nogpgcheck rstudio-server-rhel-1.1.456-x86_64.rpm
-
 
 sudo rstudio-server verify-installation
 
@@ -116,7 +118,4 @@ wget https://download1.rstudio.org/rstudio-xenial-1.1.456-amd64.deb
 
 sudo gdebi rstudio-xenial-1.1.456-amd64.deb
 rm rstudio-xenial-1.1.456-amd64.deb
-
-
-
 
